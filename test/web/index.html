@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TEST</title>
+</head>
+<body>
+
+</body>
+<script src="js/jssip-3.3.6.min.js" ></script>
+<script>
+    var socket = new JsSIP.WebSocketInterface('ws://192.168.96.73:8080/ws-sip');
+    var configuration = {
+        sockets  : [ socket ],
+        uri      : 'sip:10000@quitee.com',
+        register: true,
+        display_name:"quitee-web"
+    };
+
+    var ua = new JsSIP.UA(configuration);
+
+    ua.start();
+
+    // Register callbacks to desired call events
+    var eventHandlers = {
+        'progress': function(e) {
+            console.log('call is in progress');
+        },
+        'failed': function(e) {
+            console.log(e);
+        },
+        'ended': function(e) {
+            console.log('call ended with cause: '+ e);
+        },
+        'confirmed': function(e) {
+            console.log('call confirmed');
+        }
+    };
+
+    var options = {
+        'eventHandlers'    : eventHandlers,
+        'mediaConstraints' : { 'audio': true, video: {
+                width: 960,
+                height: 720
+            }
+        }
+    };
+
+    // var session = ua.call('sip:bob@example.com', options);
+</script>
+</html>
